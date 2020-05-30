@@ -1,24 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useMemo, useState } from 'react';
+import "./App.css";
 
-function App() {
+const fetchData = () => {
+  // Imagine here an API call which returns a random number
+  return Math.random();
+}
+
+const runHeavyCalc = data => {
+  if (!data) return;
+
+  // Math.floor is not heavy, Use your imagination again
+  console.log('Computing heavy func with data', data);
+  return Math.floor(data * 100);
+}
+
+const App = () => {
+  const [count, setCount] = useState(0);
+  const [data, setData] = useState();
+  console.log("App rendered with count", count);
+
+  useEffect(() => {
+    const data = fetchData();
+    setData(data);
+  }, [])
+
+  const result = useMemo(() => runHeavyCalc(data), [data]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Hello World</h1>
+      <p>Counter: {count}</p>
+      <p>Result is {result}</p>
+      <button onClick={() => setCount(count + 1)}>
+        Increment Count
+      </button>
     </div>
   );
 }
